@@ -28,7 +28,7 @@ class CV:
 
     def feature_map(self):
         """
-        Maps feature space from R^57 to R^1710,
+        Creates new feature space,
         based on all interaction features with degree <= 2
         """
         n = np.shape(self.input_data)[0]

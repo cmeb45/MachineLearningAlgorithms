@@ -62,6 +62,12 @@ class AveragePerceptron:
         return self
     
     def predict(self,InputData):
+        """Runs fitted average perceptron model on test data.
+        
+        Parameters
+        ----------
+        InputData: {array}, shape (n_samples, n_features)
+        """
         import numpy as np
         n = np.shape(InputData)[0]
         # Number of testing examples

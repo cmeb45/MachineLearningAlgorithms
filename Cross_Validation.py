@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 class CV:
 
     def __init__(self,K,model,train,labels,inputMap=0):

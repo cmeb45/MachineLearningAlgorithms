@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 class AveragePerceptron:
     
     def __init__(self,avg_weight=[],avg_bias=0):

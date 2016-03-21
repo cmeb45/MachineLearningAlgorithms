@@ -1,20 +1,22 @@
 #!/usr/bin/python
 
+import numpy as np
+
 class CV:
 
     def __init__(self,K,model,train,labels,inputMap=0):
         """
         Constructs a CrossValidation object with the following attributes:
-        n_folds: The number of folds
-        classifier: object for the specific model
-        input_data: {array}, shape (n_samples, n_features)
-        input_labels: array-like, shape (n_samples,)
-        folds_data: the examples for each fold
-        folds_labels: the labels for each fold
-        merge_data: examples of the K-1 folds merged into a single array
-        merge_labels: labels of the K-1 folds merged into a single array
-        trainedModel: the fitted model
-        inputMapFlag: flag variable for whether feature map is used (0==No,1==Yes)
+        n_folds : The number of folds
+        classifier : object for the specific model
+        input_data : {array}, shape (n_samples, n_features)
+        input_labels : array-like, shape (n_samples,)
+        folds_data : the examples for each fold
+        folds_labels : the labels for each fold
+        merge_data : examples of the K-1 folds merged into a single array
+        merge_labels : labels of the K-1 folds merged into a single array
+        trainedModel : the fitted model
+        inputMapFlag : flag variable for whether feature map is used (0==No,1==Yes)
         
         """
         self.n_folds = K
@@ -52,7 +54,6 @@ class CV:
     def partition_set(self):
         """Partitions input dataset (inc. labels) into K folds
         """
-        import numpy as np
         if self.inputMapFlag == 1:
             self.input_data = self.feature_map()
         # If requested, maps input data to higher dimensional space

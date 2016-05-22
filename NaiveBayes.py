@@ -2,53 +2,56 @@
 
 import numpy as np
 
+
 def logit(x):
     """ Computes logit function
-    
+
     Parameters
     ----------
     x : {float, int}
-    
+
     Returns
     -------
     out : {float, int}
         Logit value
     """
     if x > 0:
-        out = np.log(1.*x/(1-x))
+        out = np.log(1. * x / (1 - x))
         return out
+
 
 def complement(x):
     """ Computes complement of a probability/parameter
-    
+
     Parameters
     ----------
     x : {float, int}
-    
+
     Returns
     -------
     out : {float, int}
         Complement
     """
-    out = 1-x
+    out = 1 - x
     return out
+
 
 class NaiveBayes:
 
-    def __init__(self,prior=[],conditional=[]):
+    def __init__(self, prior=[], conditional=[]):
         self.model_prior = prior
         self.model_conditional = conditional
         # Parameters from fitted model: prior & class conditional
 
-    def fit(self,X,Y):
+    def fit(self, X, Y):
         """Fits Naive Bayes generative model according to training data.
-        
+
         Parameters
         ----------
         X : {array}, shape (n_samples, n_features)
-        
+
         Y : array-like, shape (n_samples,)
-        
+
         Returns
         -------
         self : object
@@ -62,30 +65,28 @@ class NaiveBayes:
         prior = []
         # Class prior distribution parameters (MLE)
         for label in xrange(K):
-            indices = np.where(Y==label+1)[0]
-            temp_split = X[indices,:]
+            indices = np.where(Y == label + 1)[0]
+            temp_split = X[indices, :]
             temp_count = np.shape(temp_split)[0]
-            prior.append(1.*temp_count/n)
-            temp_sum = np.apply_along_axis(sum,0,temp_split.toarray())
-            conditional.append(1.*(1+1.*temp_sum)/(2+temp_count))
+            prior.append(1. * temp_count / n)
+            temp_sum = np.apply_along_axis(sum, 0, temp_split.toarray())
+            conditional.append(1. * (1 + 1. * temp_sum) / (2 + temp_count))
         self.model_prior = prior
         self.model_conditional = conditional
         return self
 
-    def predict(self,params,test):
+    def predict(self, params, test):
         """Makes predictions on test data based on Naive Bayes model
-        
+
         Parameters
         ----------
         test: {array}, shape (n_samples, n_features)
-        
+
         Returns
         -------
         preds : list
             Returns predicted class for each test point.
         """
-        # 
-        # 
         vect_logit = np.vectorize(logit)
         vect_comp = np.vectorize(complement)
         n_test = np.shape(test)[0]
@@ -101,11 +102,12 @@ class NaiveBayes:
         weight = vect_logit(conditional)
         # Stores weight matrix
         condition_comp = vect_comp(conditional)
-        intercept = np.log(prior) + np.sum(np.apply_along_axis(np.log,1,condition_comp),axis=1)
+        intercept = np.log(
+            prior) + np.sum(np.apply_along_axis(np.log, 1, condition_comp), axis=1)
         # Stores intercept vector
         weight = weight.transpose()
         classifier = test.dot(weight) + intercept
-        preds = np.argmax(classifier,axis=1) + 1
+        preds = np.argmax(classifier, axis=1) + 1
         # Add 1 because the classes have a 1-based index
-        preds = preds.reshape(n_test,1)
+        preds = preds.reshape(n_test, 1)
         return preds
